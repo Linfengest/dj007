@@ -32,18 +32,14 @@ class NewVisitorTest(unittest.TestCase):
 
         #按下回车，页面更新，
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(3)
-        
-        #表格显示‘1：Buy peacock feathers’
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue('Buy peacock feathers',[row.text for row in rows])
+        time.sleep(1)
 
         #页面还有输入框，继续输入
         #输入“Use peacock feather to make a fly"
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Use peacock feather to make a fly')
         inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
 
         #表格显示‘Buy peacock feathers Use peacock feather to make a fly’
         table = self.browser.find_element_by_id('id_list_table')
