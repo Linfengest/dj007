@@ -30,14 +30,16 @@ class NewVisitorTest(unittest.TestCase):
         #在文本框中输入“Buy peacock feathers"
         inputbox.send_keys('Buy peacock feathers')
 
-        #按下回车，页面更新，表格显示‘1：Buy peacock feathers’
-        inputbox.send_keys(keys.ENTER)
+        #按下回车，页面更新，
+        inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
         
+        #表格显示‘1：Buy peacock feathers’
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.assertTrue(
-                        any(row.text == '1：Buy peacock feathers')
+                        any(row.text == '1：Buy peacock feathers' for row in rows),
+                        "New to-do item did not appear in table"
                         )
 
         self.fail("Finish the test!")
