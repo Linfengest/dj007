@@ -10,18 +10,18 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
-    #检查重构
-    def check_for_row_in_list_table(self,row_text):
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(row_text,[row.text for row in rows])
-
     #输入重构
     def inputtext(self,write_text):
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys(write_text)
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
+
+    #检查重构
+    def check_for_row_in_list_table(self,row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(row_text,[row.text for row in rows])
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         #听说一个很酷的在线待办事项应用
@@ -41,10 +41,10 @@ class NewVisitorTest(unittest.TestCase):
                         )
 
         #输入两个待办事项并检查
-        inputtext("Buy peacock feathers")
-        inputtext("Use peacock feather to make a fly")
-        check_for_row_in_list_table("Buy peacock feathers")
-        check_for_row_in_list_table("Use peacock feather to make a fly")
+        self.inputtext("Buy peacock feathers")
+        self.inputtext("Use peacock feather to make a fly")
+        self.check_for_row_in_list_table("Buy peacock feathers")
+        self.check_for_row_in_list_table("Use peacock feather to make a fly")
 
         self.fail("Finish the test!")
         #在文本框中输入“Buy peacock feathers"
