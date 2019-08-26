@@ -10,7 +10,9 @@
         <h1>Your To-Do list</h1>
         <input id='id_new_item' placeholder="Enter a to-do item"/>
         <table id="id_list_table">
-            <tr><td>{{ new_item_text}}</td></tr>
+            {% for item in items %}
+                <tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
+            {% endfor %}
         </table>
     </body>
 </html>

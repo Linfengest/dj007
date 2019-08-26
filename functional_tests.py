@@ -21,7 +21,7 @@ class NewVisitorTest(unittest.TestCase):
     def check_for_row_in_list_table(self,row_text):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(row_text,[row.text for row in rows])
+        self.assertIn(row_text,[row.text for row in rows])
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         #听说一个很酷的在线待办事项应用
@@ -43,8 +43,8 @@ class NewVisitorTest(unittest.TestCase):
         #输入两个待办事项并检查
         self.inputtext("Buy peacock feathers")
         self.inputtext("Use peacock feather to make a fly")
-        self.check_for_row_in_list_table("Buy peacock feathers")
-        self.check_for_row_in_list_table("Use peacock feather to make a fly")
+        self.check_for_row_in_list_table("1: Buy peacock feathers")
+        self.check_for_row_in_list_table("2: Use peacock feather to make a fly")
 
         self.fail("Finish the test!")
         #在文本框中输入“Buy peacock feathers"
