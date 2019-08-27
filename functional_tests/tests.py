@@ -1,13 +1,13 @@
 from selenium import webdriver
 from django.test import LiveServerTestCase
-from seleniun.common.exceptions import WebDriverException
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 import unittest
 import time
 
 MAX_WAIT = 10
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
     
@@ -58,7 +58,62 @@ class NewVisitorTest(unittest.TestCase):
         self.wait_for_row_in_list_table("1: Buy peacock feathers")
         self.wait_for_row_in_list_table("2: Use peacock feather to make a fly")
 
-        self.fail("Finish the test!")
+    def test_multiple_users_can_start_lists_at_different_urls(self):
+        #创立一个新的待办事项
+        self.browser.get(self.live_server_url)
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy peacock feathers')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table("1: Buy peacock feathers")
+
+        #注意到一个唯一的url
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url,'/lists/.+')
+
+        #新用户西里访问了网站
+
+        #我们使用了一个新的浏览器会话
+        #确保信息不会从cookie中泄露出去
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        #西里访问了首页
+        #页面中看不到其他人的清单
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feather',page_text)
+        self.assertIn('make a fly',page_text)
+
+        #西里输入一个新待办事项，新建一个清单
+        self.inputbox.send_keys('Buy milk')
+        self.inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: Buy milk')
+
+        #西里得到他唯一的url
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url,'/lists/.+')
+        self.assertEqual(francis_list_url, edith_list_url)
+
+        #这个页面没有迪丝的清单
+        page_text = self.nrowser.find_element_by_tag_name('body').text
+        self.assertNotin('Buy peacock feather',page.text)
+        self.assertIn('make a fly',page_text)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         #在文本框中输入“Buy peacock feathers"
         #inputbox.send_keys('Buy peacock feathers')
 
